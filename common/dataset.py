@@ -12,7 +12,7 @@ class BaseImageDataset(tordata.Dataset):
     def __init__(self, dataset_name, transforms=None):
         self.transforms = transforms
         #self.root = osp.join(osp.dirname(osp.dirname(__file__)), 'dataset')
-        self.root = '../input/casia-webface/casia-webface'
+        self.root = '/kaggle/input/casia-webface/casia-webface'
         df = pd.read_csv(osp.join(self.root, '{}.txt'.format(dataset_name)), header=None, index_col=False, sep=' ')
         self.data = df.values
         self.image_list = np.array([osp.join(self.root, x) for x in self.data[:, 1]])
