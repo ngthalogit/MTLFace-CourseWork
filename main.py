@@ -8,7 +8,6 @@ if __name__ == '__main__':
     print(opt)
 
     dist.init_process_group(backend='nccl', init_method='env://')
-    print(type(dist.get_rank()))
-    #torch.cuda.set_device(dist.get_rank().sort())
+    torch.cuda.set_device(dist.get_rank())
     model = MTLFace(opt)
     model.fit()
