@@ -42,7 +42,7 @@ class FR(BasicTask):
     def set_model(self):
         opt = self.opt
         backbone = backbone_dict[opt.backbone_name](input_size=opt.image_size)
-        number_classes = 10573 if opt.dataset_name == 'casia-webface' else len(self.prefetcher.__loader__.dataset.classes)
+        number_classes = 10572 if opt.dataset_name == 'casia-webface' else len(self.prefetcher.__loader__.dataset.classes)
         head = CosFace(in_features=512, out_features=number_classes,
                        s=opt.head_s, m=opt.head_m)
         estimation_network = AgeEstimationModule(input_size=opt.image_size, age_group=opt.age_group)
