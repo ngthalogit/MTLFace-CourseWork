@@ -165,8 +165,8 @@ def convert_to_ddp(*modules):
 
 def get_dex_age(pred):
     pred = F.softmax(pred, dim=1)
-    print(np.shape(pred))
-    print(np.shape(torch.arange(pred.size(1)).to(pred.device)))
+    print('1----',np.shape(pred))
+    print('2----',np.shape(torch.arange(pred.size(1)).to(pred.device)))
     value = torch.sum(pred * torch.arange(pred.size(1)).to(pred.device), dim=1)
     return value
 
