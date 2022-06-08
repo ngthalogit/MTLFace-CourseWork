@@ -30,6 +30,7 @@ class CosFace(nn.Module):
         # --------------------------- convert label to one-hot ---------------------------
         one_hot = torch.zeros(cosine.size()).to(input)
         one_hot.scatter_(1, label.view(-1, 1).long(), 1)
+        print(np.shape(one_hot))
         # -------------torch.where(out_i = {x_i if condition_i else y_i) -------------
         output = self.s * (cosine - self.m * one_hot)
 
