@@ -12,6 +12,7 @@ from . import BasicTask
 from backbone.aifr import backbone_dict, AgeEstimationModule
 from head.cosface import CosFace
 from common.dataset import TrainImageDataset
+import numpy as np
 
 
 class FR(BasicTask):
@@ -43,7 +44,7 @@ class FR(BasicTask):
         backbone = backbone_dict[opt.backbone_name](input_size=opt.image_size)
         head = CosFace(in_features=512, out_features=len(self.prefetcher.__loader__.dataset.classes),
                        s=opt.head_s, m=opt.head_m)
-
+        print('-------------Classes: ', len(self.prefetcher.__loader__.dataset.classes))
         estimation_network = AgeEstimationModule(input_size=opt.image_size, age_group=opt.age_group)
 
         da_discriminator = AgeEstimationModule(input_size=opt.image_size, age_group=opt.age_group)
