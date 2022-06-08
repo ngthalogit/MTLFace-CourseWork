@@ -94,6 +94,7 @@ class MTLFace(object):
         for n_iter in tqdm.trange(opt.restore_iter + 1, opt.num_iter + 1, disable=(opt.local_rank != 0)):
             # img, label, age, gender
             fr_inputs = self.fr.prefetcher.next()
+
             if opt.train_fr:
                 self.fr.train(fr_inputs, n_iter)
             if opt.train_fas:
