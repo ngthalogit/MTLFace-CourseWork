@@ -135,7 +135,7 @@ class MTLFace(object):
                     #self.fas.validate(n_iter)
 
             # save loss to .csv
-            if otp.train_fr:
+            if opt.train_fr:
                 loss_dict = {
                     'id': id_loss,
                     'da': da_loss,
