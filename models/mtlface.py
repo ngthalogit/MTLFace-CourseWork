@@ -107,6 +107,7 @@ class MTLFace(object):
                 if  total_loss < loss_checkpoint:
                     loss_checkpoint = total_loss
                     self.fr.logger.checkpoints(n_iter)
+
             if opt.train_fas:
                 # target_img, target_label
                 fas_inputs = self.fas.prefetcher.next()
@@ -128,14 +129,16 @@ class MTLFace(object):
                     #     loss_checkpoint = total_loss
                     #     self.fr.logger.checkpoints(n_iter)
 
-                    # save loss to .csv
-                        loss_dict = {
-                            'id': id_loss,
-                            'da': da_loss,
-                            'age': age_loss
-                        }
-                        df = pd.DataFrame.from_dict(loss_dict)
-                        df.to_csv('./loss.csv', index=False)
                 if opt.train_fas:
                     pass
                     #self.fas.validate(n_iter)
+
+            # save loss to .csv
+            if otp.train_fr:
+                loss_dict = {
+                    'id': id_loss,
+                    'da': da_loss,
+                    'age': age_loss
+                }
+                df = pd.DataFrame.from_dict(loss_dict)
+                df.to_csv('./loss.csv', index=False)
