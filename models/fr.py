@@ -28,7 +28,6 @@ class FR(BasicTask):
                 transforms.Normalize(mean=[0.5, ], std=[0.5, ])
             ])
         train_dataset = TrainImageDataset(opt.dataset_name, train_transform)
-
         weights = None
         sampler = RandomSampler(train_dataset, batch_size=opt.batch_size,
                                 num_iter=opt.num_iter, restore_iter=opt.restore_iter, weights=weights)
@@ -70,8 +69,34 @@ class FR(BasicTask):
         if opt.restore_iter > 0:
             self.logger.load_checkpoints(opt.restore_iter)
 
+    def forward_da(self, x_id, ages):
+        x_age, x_group = self.da_discriminator(self.grl(x_id))
+        loss = self.compute_age_loss(x_age, x_group, ages)
+        return loss
+
     def validate(self, n_iter):
-        pass
+        # load validation set
+
+        # eval
+        self.backbone.eval()
+        self.estimation_network.eval()
+        self.head.eval()
+        self.da_discriminator.eval()
+
+        with torch.no_grad():
+            with amp.autocast(enabled=opt.amp):
+                embedding, x_id, x_age = self.backbone(images, return_age=True)
+            embedding = embedding.float()
+            x_id = x_id.float()
+            x_age = x_age.float()
+
+        id_loss = F.cross_entropy(self.head(embedding, labels), labels)
+        x_age, x_group = self.estimation_network(x_age)
+        age_loss = self.compute_age_loss(x_age, x_group, ages)
+        da_loss = self.forward_da(x_id, ages)
+        id_loss, da_loss, age_loss = reduce_loss(id_loss, da_loss, age_loss)
+
+        return (id_loss, da_loss, age_loss)
 
     def adjust_learning_rate(self, step):
         assert step > 0, 'batch index should large than 0'
@@ -90,10 +115,6 @@ class FR(BasicTask):
                    F.cross_entropy(x_group, age2group(ages, age_group=opt.age_group).long())
         return age_loss
 
-    def forward_da(self, x_id, ages):
-        x_age, x_group = self.da_discriminator(self.grl(x_id))
-        loss = self.compute_age_loss(x_age, x_group, ages)
-        return loss
 
     def train(self, inputs, n_iter):
         opt = self.opt

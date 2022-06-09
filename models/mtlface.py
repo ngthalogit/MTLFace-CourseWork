@@ -115,7 +115,7 @@ class MTLFace(object):
                         'age' : age_loss
                     }
                     df = pd.DataFrame.from_dict(loss_dict)
-                    df.to_csv('/kaggle/working/MTLFace-CourseWork/loss.csv', index=False)
+                    df.to_csv('./loss.csv', index=False)
             if opt.train_fas:
                 # target_img, target_label
                 fas_inputs = self.fas.prefetcher.next()
@@ -124,8 +124,28 @@ class MTLFace(object):
                 _fas_inputs = [self.fr.backbone.module, self.fr.estimation_network,
                                fr_inputs[0], fas_inputs[0], fr_inputs[1], fas_inputs[1]]
                 self.fas.train(_fas_inputs, n_iter)
+
             if n_iter % opt.val_interval == 0:
                 if opt.train_fr:
-                    self.fr.validate(n_iter)
+                    pass
+                    # loss = self.fr.validate(n_iter)
+                    # id_loss.append(loss[0])
+                    # da_loss.append(loss[1])
+                    # age_loss.append(loss[2])
+                    # # save model
+                    # total_loss = id_loss[-1] + da_loss[-1] + age_loss[-1]
+                    # if total_loss < loss_checkpoint:
+                    #     loss_checkpoint = total_loss
+                    #     self.fr.logger.checkpoints(n_iter)
+                    # # save loss to .csv
+                    # if n_iter == opt.num_iter + 1:
+                    #     loss_dict = {
+                    #         'id': id_loss,
+                    #         'da': da_loss,
+                    #         'age': age_loss
+                    #     }
+                    #     df = pd.DataFrame.from_dict(loss_dict)
+                    #     df.to_csv('/kaggle/working/MTLFace-CourseWork/loss.csv', index=False)
                 if opt.train_fas:
-                    self.fas.validate(n_iter)
+                    pass
+                    #self.fas.validate(n_iter)

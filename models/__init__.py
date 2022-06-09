@@ -4,7 +4,7 @@ from common.ops import LoggerX
 class BasicTask(object):
     def __init__(self, opt):
         self.opt = opt
-        self.logger = LoggerX(save_root='/kaggle/working')
+        self.logger = LoggerX(save_root='./')
 
     def set_loader(self):
         pass
