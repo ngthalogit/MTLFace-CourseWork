@@ -119,6 +119,7 @@ class MTLFace(object):
 
             if n_iter % opt.val_interval == 0:
                 if opt.train_fr:
+                    pass
                     # loss = self.fr.validate(n_iter)
                     # id_loss.append(loss[0])
                     # da_loss.append(loss[1])
