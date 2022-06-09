@@ -90,28 +90,26 @@ class MTLFace(object):
 
     def fit(self):
         opt = self.opt
-        total_loss, id_loss, da_loss, age_loss = [], [], [], []
-        loss_checkpoint = 1000000
+        id_loss, da_loss, age_loss = [], [], []
+        loss_checkpoint = 100000
         # training routine
         for n_iter in tqdm.trange(opt.restore_iter + 1, opt.num_iter + 1, disable=(opt.local_rank != 0)):
             # img, label, age, gender
             fr_inputs = self.fr.prefetcher.next()
             if opt.train_fr:
-                # total_loss, id_loss, da_loss, age_loss
+                # id_loss, da_loss, age_loss
                 loss = self.fr.train(fr_inputs, n_iter)
-                total_loss.append(loss[0])
-                id_loss.append(loss[1])
-                da_loss.append(loss[2])
-                age_loss.append(loss[3])
+                id_loss.append(loss[0])
+                da_loss.append(loss[1])
+                age_loss.append(loss[2])
                 # save model
-                print(total_loss[-1])
-                if total_loss[-1] < loss_checkpoint:
-                    loss_checkpoint = total_loss[-1]
+                total_loss = id_loss[-1] + da_loss[-1] + age_loss[-1]
+                if  total_loss < loss_checkpoint:
+                    loss_checkpoint = total_loss
                     self.fr.logger.checkpoints(n_iter)
                 # save loss
                 if n_iter == opt.num_iter + 1:
                     loss_dict = {
-                        'total' : total_loss,
                         'id' : id_loss,
                         'da' : da_loss,
                         'age' : age_loss

@@ -139,4 +139,4 @@ class FR(BasicTask):
         lr = self.optimizer.param_groups[0]['lr']
         self.logger.msg([id_loss, da_loss, age_loss, lr], n_iter)
 
-        return (total_loss, id_loss, da_loss, age_loss)
+        return (id_loss, da_loss, age_loss)
