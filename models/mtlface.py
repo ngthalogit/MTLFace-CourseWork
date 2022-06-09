@@ -142,4 +142,5 @@ class MTLFace(object):
                     'age': age_loss
                 }
                 df = pd.DataFrame.from_dict(loss_dict)
+                print('Saving loss value...')
                 df.to_csv('./loss.csv', index=False)
