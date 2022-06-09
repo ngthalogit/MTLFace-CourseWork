@@ -3,3 +3,4 @@ torchvision
 tqdm
 mxnet
 numpy
+pandas

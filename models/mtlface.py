@@ -1,6 +1,6 @@
 import argparse
 import tqdm
-
+import pandas as pd
 from .fr import FR
 from .fas import FAS
 from common.ops import load_network
@@ -90,13 +90,33 @@ class MTLFace(object):
 
     def fit(self):
         opt = self.opt
+        total_loss, id_loss, da_loss, age_loss = [], [], [], []
+        loss_checkpoint = 100000
         # training routine
         for n_iter in tqdm.trange(opt.restore_iter + 1, opt.num_iter + 1, disable=(opt.local_rank != 0)):
             # img, label, age, gender
             fr_inputs = self.fr.prefetcher.next()
-
             if opt.train_fr:
-                self.fr.train(fr_inputs, n_iter)
+                # total_loss, id_loss, da_loss, age_loss
+                loss = self.fr.train(fr_inputs, n_iter)
+                total_loss.append(loss[0])
+                id_loss.append(loss[1])
+                da_loss.append(loss[2])
+                age_loss.append(loss[3])
+                # save model
+                if total_loss[-1] < loss_checkpoint:
+                    loss_checkpoint = total_loss[-1]
+                self.fr.checkpoints(n_iter)
+                # save loss
+                if n_iter == opt.num_iter + 1:
+                    loss_dict = {
+                        'total' : total_loss,
+                        'id' : id_loss,
+                        'da' : da_loss,
+                        'age' : age_loss
+                    }
+                    df = pd.DataFrame.from_dict(loss_dict)
+                    df.to_csv('/kaggle/working/MTLFace-CourseWork/loss.csv', index=False)
             if opt.train_fas:
                 # target_img, target_label
                 fas_inputs = self.fas.prefetcher.next()
