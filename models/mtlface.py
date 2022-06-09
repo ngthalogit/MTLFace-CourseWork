@@ -106,7 +106,7 @@ class MTLFace(object):
                 # save model
                 if total_loss[-1] < loss_checkpoint:
                     loss_checkpoint = total_loss[-1]
-                self.fr..logger.checkpoints(n_iter)
+                self.fr.logger.checkpoints(n_iter)
                 # save loss
                 if n_iter == opt.num_iter + 1:
                     loss_dict = {
