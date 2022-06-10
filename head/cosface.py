@@ -32,7 +32,6 @@ class CosFace(nn.Module):
         one_hot.scatter_(1, label.view(-1, 1).long(), 1)
         # -------------torch.where(out_i = {x_i if condition_i else y_i) -------------
         output = self.s * (cosine - self.m * one_hot)
-
         return output
 
     def __repr__(self):

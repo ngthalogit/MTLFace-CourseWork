@@ -135,12 +135,12 @@ class MTLFace(object):
                     #self.fas.validate(n_iter)
 
             # save loss to .csv
-            if opt.train_fr:
-                loss_dict = {
-                    'id': id_loss,
-                    'da': da_loss,
-                    'age': age_loss
-                }
-                df = pd.DataFrame.from_dict(loss_dict)
-                print('Saving loss value...')
-                df.to_csv('./loss.csv', index=False)
+            # if opt.train_fr:
+            #     loss_dict = {
+            #         'id': id_loss,
+            #         'da': da_loss,
+            #         'age': age_loss
+            #     }
+            #     df = pd.DataFrame.from_dict(loss_dict)
+            #     print('Saving loss value...')
+            #     df.to_csv('./loss.csv', index=False)

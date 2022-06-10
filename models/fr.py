@@ -111,6 +111,7 @@ class FR(BasicTask):
 
     def compute_age_loss(self, x_age, x_group, ages):
         opt = self.opt
+        # get_dex_age : DEX - Deep expectation - https://openaccess.thecvf.com/content_iccv_2015_workshops/w11/papers/Rothe_DEX_Deep_EXpectation_ICCV_2015_paper.pdf
         age_loss = F.mse_loss(get_dex_age(x_age), ages) + \
                    F.cross_entropy(x_group, age2group(ages, age_group=opt.age_group).long())
         return age_loss
@@ -135,7 +136,10 @@ class FR(BasicTask):
             embedding, x_id, x_age = self.backbone(images, return_age=True)
 
         ######## Train Face Recognition
-        id_loss = F.cross_entropy(self.head(embedding, labels), labels)
+        output_head = self.head(embedding, labels)
+        print('output_head_shape: ',np.shape(output_head))
+        print(output_head)
+        id_loss = F.cross_entropy(output_head, labels)
         x_age, x_group = self.estimation_network(x_age)
         age_loss = self.compute_age_loss(x_age, x_group, ages)
         da_loss = self.forward_da(x_id, ages)
