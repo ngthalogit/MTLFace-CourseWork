@@ -116,7 +116,6 @@ class FR(BasicTask):
 
         ######## Train Face Recognition
         output_head = self.head(embedding, labels)
-        print(np.shape(embedding))
         id_loss = F.cross_entropy(output_head, labels)
         x_age, x_group = self.estimation_network(x_age)
         age_loss = self.compute_age_loss(x_age, x_group, ages)
