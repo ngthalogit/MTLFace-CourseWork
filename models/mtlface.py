@@ -106,7 +106,7 @@ class MTLFace(object):
                 total_loss = id_loss[-1] + da_loss[-1] + age_loss[-1]
                 if  total_loss < loss_checkpoint:
                     loss_checkpoint = total_loss
-                    self.fr.logger.checkpoints(n_iter)
+                    #self.fr.logger.checkpoints(n_iter)
 
             if opt.train_fas:
                 # target_img, target_label
