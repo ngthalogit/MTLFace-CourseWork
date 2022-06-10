@@ -102,7 +102,6 @@ class MTLFace(object):
                 id_loss.append(loss[0])
                 da_loss.append(loss[1])
                 age_loss.append(loss[2])
-                # save model
                 if n_iter == opt.num_iter:
                     self.fr.logger.checkpoints(n_iter)
 
@@ -122,13 +121,13 @@ class MTLFace(object):
                 if opt.train_fas:
                     pass
 
-            # save loss to .csv
-            if opt.train_fr:
-                loss_dict = {
-                    'id': id_loss,
-                    'da': da_loss,
-                    'age': age_loss
-                }
-                df = pd.DataFrame.from_dict(loss_dict)
-                print('Saving loss value...')
-                df.to_csv('./loss.csv', index=False)
+        # save loss to .csv
+        if opt.train_fr:
+            loss_dict = {
+                'id': id_loss,
+                'da': da_loss,
+                'age': age_loss
+            }
+            df = pd.DataFrame.from_dict(loss_dict)
+            print('Saving loss value...')
+            df.to_csv('./loss.csv', index=False)
