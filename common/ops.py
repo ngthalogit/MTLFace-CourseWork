@@ -105,7 +105,6 @@ class LoggerX(object):
             module = self.modules[i]
             #torch.save(module.state_dict(), osp.join(self.models_save_dir, '{}-{}'.format(module_name, epoch)))
             torch.save(module.state_dict(), osp.join(self.models_save_dir, '{}.pt'.format(module_name)))
-        print('\nSave model at epoch {} \n'.format(epoch))
 
     def load_checkpoints(self, epoch):
         for i in range(len(self.modules)):

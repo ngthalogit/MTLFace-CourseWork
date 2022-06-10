@@ -91,7 +91,7 @@ class MTLFace(object):
     def fit(self):
         opt = self.opt
         id_loss, da_loss, age_loss = [], [], []
-        loss_checkpoint = 100000
+        idx = []
         # training routine
         for n_iter in tqdm.trange(opt.restore_iter + 1, opt.num_iter + 1, disable=(opt.local_rank != 0)):
             # img, label, age, gender
@@ -103,10 +103,8 @@ class MTLFace(object):
                 da_loss.append(loss[1])
                 age_loss.append(loss[2])
                 # save model
-                total_loss = id_loss[-1] + da_loss[-1] + age_loss[-1]
-                if  total_loss < loss_checkpoint:
-                    loss_checkpoint = total_loss
-                    #self.fr.logger.checkpoints(n_iter)
+                if n_iter == opt.num_iter:
+                    self.fr.logger.checkpoints(n_iter)
 
             if opt.train_fas:
                 # target_img, target_label
@@ -120,27 +118,17 @@ class MTLFace(object):
             if n_iter % opt.val_interval == 0:
                 if opt.train_fr:
                     pass
-                    # loss = self.fr.validate(n_iter)
-                    # id_loss.append(loss[0])
-                    # da_loss.append(loss[1])
-                    # age_loss.append(loss[2])
-                    # # save model
-                    # total_loss = id_loss[-1] + da_loss[-1] + age_loss[-1]
-                    # if total_loss < loss_checkpoint:
-                    #     loss_checkpoint = total_loss
-                    #     self.fr.logger.checkpoints(n_iter)
 
                 if opt.train_fas:
                     pass
-                    #self.fas.validate(n_iter)
 
             # save loss to .csv
-            # if opt.train_fr:
-            #     loss_dict = {
-            #         'id': id_loss,
-            #         'da': da_loss,
-            #         'age': age_loss
-            #     }
-            #     df = pd.DataFrame.from_dict(loss_dict)
-            #     print('Saving loss value...')
-            #     df.to_csv('./loss.csv', index=False)
+            if opt.train_fr:
+                loss_dict = {
+                    'id': id_loss,
+                    'da': da_loss,
+                    'age': age_loss
+                }
+                df = pd.DataFrame.from_dict(loss_dict)
+                print('Saving loss value...')
+                df.to_csv('./loss.csv', index=False)
