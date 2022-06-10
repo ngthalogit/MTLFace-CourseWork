@@ -138,7 +138,10 @@ class FR(BasicTask):
         ######## Train Face Recognition
         output_head = self.head(embedding, labels)
         print('output_head_shape: ',np.shape(output_head))
-        print(torch.sum(output_head, dim=0))
+        sum = torch.sum(output_head, dim=1)
+        print(sum)
+        print(np.shape(sum))
+
         id_loss = F.cross_entropy(output_head, labels)
         x_age, x_group = self.estimation_network(x_age)
         age_loss = self.compute_age_loss(x_age, x_group, ages)
