@@ -5,7 +5,7 @@ import torch.cuda.amp as amp
 
 from common.sampler import RandomSampler
 from common.data_prefetcher import DataPrefetcher
-from common.ops import convert_to_ddp
+from common.ops import convert_to_ddp, reduce_loss
 from . import BasicTask
 from common.dataset import AgingDataset
 
