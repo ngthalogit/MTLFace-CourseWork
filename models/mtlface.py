@@ -113,12 +113,12 @@ class MTLFace(object):
                 _fas_inputs = [self.fr.backbone.module, self.fr.estimation_network,
                                fr_inputs[0], fas_inputs[0], fr_inputs[1], fas_inputs[1]]
                 loss = self.fas.train(_fas_inputs, n_iter)
-                d1_logit.append(loss[0].cpu())
-                d3_logit.append(loss[1].cpu())
-                d_loss.append(loss[2].cpu())
-                g_logit.append(loss[3].cpu())
-                fas_id_loss.append(loss[4].cpu())
-                fas_age_loss.append(loss[5].cpu())
+                d1_logit.append(loss[0])
+                d3_logit.append(loss[1])
+                d_loss.append(loss[2])
+                g_logit.append(loss[3])
+                fas_id_loss.append(loss[4])
+                fas_age_loss.append(loss[5])
                 if n_iter == opt.num_iter:
                     self.fas.logger.checkpoints(n_iter)
             if n_iter % opt.val_interval == 0:
@@ -147,7 +147,12 @@ class MTLFace(object):
                 'fas_id_loss': fas_id_loss,
                 'fas_age_loss': fas_age_loss
             }
-
+            print(type(d1_logit[0]))
+            print(type(d3_logit[0]))
+            print(type(d_loss[0]))
+            print(type(g_logit[0]))
+            print(type(fas_id_loss[0]))
+            print(type(fas_age_loss[0]))
             df = pd.DataFrame.from_dict(loss_dict)
             print('Saving loss value...')
             df.to_csv('./loss.csv', index=False)
