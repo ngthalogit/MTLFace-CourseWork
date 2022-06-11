@@ -115,3 +115,4 @@ class FAS(BasicTask):
             self.g_optim.step()
 
         self.logger.msg([d1_logit, d3_logit, g_logit, fas_id_loss, fas_age_loss], n_iter)
+        return (d1_logit, d3_logit, d_loss, g_logit, fas_id_loss, fas_age_loss)

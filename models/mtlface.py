@@ -91,7 +91,7 @@ class MTLFace(object):
     def fit(self):
         opt = self.opt
         id_loss, da_loss, age_loss = [], [], []
-        idx = []
+        d1_logit, d3_logit, d_loss, g_logit, fas_id_loss, fas_age_loss = [], [], [], [], [], []
         # training routine
         for n_iter in tqdm.trange(opt.restore_iter + 1, opt.num_iter + 1, disable=(opt.local_rank != 0)):
             # img, label, age, gender
@@ -112,8 +112,15 @@ class MTLFace(object):
                 # You can also use other attributes for aligning
                 _fas_inputs = [self.fr.backbone.module, self.fr.estimation_network,
                                fr_inputs[0], fas_inputs[0], fr_inputs[1], fas_inputs[1]]
-                self.fas.train(_fas_inputs, n_iter)
-
+                loss = self.fas.train(_fas_inputs, n_iter)
+                d1_logit.append(loss[0])
+                d3_logit.append(loss[1])
+                d_loss.append(loss[2])
+                g_logit.append(loss[3])
+                fas_id_loss.append(loss[4])
+                fas_age_loss.append(loss[5])
+                if n_iter == opt.num_iter:
+                    self.fas.logger.checkpoints(n_iter)
             if n_iter % opt.val_interval == 0:
                 if opt.train_fr:
                     pass
@@ -127,6 +134,18 @@ class MTLFace(object):
                 'id': id_loss,
                 'da': da_loss,
                 'age': age_loss
+            }
+            df = pd.DataFrame.from_dict(loss_dict)
+            print('Saving loss value...')
+            df.to_csv('./loss.csv', index=False)
+        if opt.train_fas:
+            loss_dict = {
+                'd1_logit': d1_logit,
+                'd3_logit': d3_logit,
+                'd_loss': d_loss,
+                'g_logit': g_logit,
+                'fas_id_loss': fas_id_loss,
+                'fas_age_loss': fas_age_loss
             }
             df = pd.DataFrame.from_dict(loss_dict)
             print('Saving loss value...')
