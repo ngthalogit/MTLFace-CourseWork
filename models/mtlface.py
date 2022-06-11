@@ -147,6 +147,8 @@ class MTLFace(object):
                 'fas_id_loss': fas_id_loss,
                 'fas_age_loss': fas_age_loss
             }
+            for k, v in loss_dict:
+                print(v.device())
             df = pd.DataFrame.from_dict(loss_dict)
             print('Saving loss value...')
             df.to_csv('./loss.csv', index=False)
