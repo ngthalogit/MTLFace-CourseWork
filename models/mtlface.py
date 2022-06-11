@@ -147,12 +147,6 @@ class MTLFace(object):
                 'fas_id_loss': fas_id_loss,
                 'fas_age_loss': fas_age_loss
             }
-            print(type(d1_logit[0]))
-            print(type(d3_logit[0]))
-            print(type(d_loss[0]))
-            print(type(g_logit[0]))
-            print(type(fas_id_loss[0]))
-            print(type(fas_age_loss[0]))
             df = pd.DataFrame.from_dict(loss_dict)
             print('Saving loss value...')
             df.to_csv('./loss.csv', index=False)
