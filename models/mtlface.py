@@ -28,9 +28,9 @@ class MTLFace(object):
         self.fr.set_model()
         if opt.train_fas:
             if opt.id_pretrained_path is not None:
-                self.fr.backbone.load_state_dict(load_network(opt.id_pretrained_path))
+                self.fr.backbone.load_state_dict(load_network(opt.id_pretrained_path), strict=False)
             if opt.age_pretrained_path is not None:
-                self.fr.estimation_network.load_state_dict(load_network(opt.age_pretrained_path))
+                self.fr.estimation_network.load_state_dict(load_network(opt.age_pretrained_path), strict=False)
             self.fas = FAS(opt)
             self.fas.set_loader()
             self.fas.set_model()

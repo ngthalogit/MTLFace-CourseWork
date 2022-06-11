@@ -60,7 +60,7 @@ def get_varname(var):
 
 def load_network(state_dict):
     if isinstance(state_dict, str):
-        state_dict = torch.load(state_dict, map_location='cpu', strict=False)
+        state_dict = torch.load(state_dict, map_location='cpu')
     # create new OrderedDict that does not contain `module.`
     from collections import OrderedDict
     new_state_dict = OrderedDict()
