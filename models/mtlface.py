@@ -103,7 +103,7 @@ class MTLFace(object):
                 id_loss.append(loss[0])
                 da_loss.append(loss[1])
                 age_loss.append(loss[2])
-                total_loss = id_loss + da_loss + age_loss
+                total_loss = id_loss[-1] + da_loss[-1] + age_loss[-1]
                 if loss_check > total_loss:
                     loss_check = total_loss
                     self.fr.logger.checkpoints(n_iter, last=False)
