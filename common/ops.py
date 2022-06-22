@@ -79,7 +79,7 @@ class LoggerX(object):
         self.models_save_dir = osp.join(save_root, 'save_models_best')
         os.makedirs(self.models_save_dir, exist_ok=True)
         os.makedirs(self.images_save_dir, exist_ok=True)
-        os.makedirs(self.images_save_dir_last, exist_ok=True)
+        os.makedirs(self.models_save_dir_last, exist_ok=True)
         self._modules = []
         self._module_names = []
         self.world_size = dist.get_world_size()
