@@ -74,8 +74,9 @@ class LoggerX(object):
 
     def __init__(self, save_root):
         assert dist.is_initialized()
-        self.models_save_dir = osp.join(save_root, 'save_models')
+        self.models_save_dir_last = osp.join(save_root, 'save_models')
         self.images_save_dir = osp.join(save_root, 'save_images')
+        self.models_save_dir = osp.join(save_root, 'save_models_best')
         os.makedirs(self.models_save_dir, exist_ok=True)
         os.makedirs(self.images_save_dir, exist_ok=True)
         self._modules = []
@@ -97,14 +98,15 @@ class LoggerX(object):
             self._modules.append(modules[i])
             self._module_names.append(get_varname(modules[i]))
 
-    def checkpoints(self, epoch):
+    def checkpoints(self, epoch, last=True):
         if self.local_rank != 0:
             return
+        save_dirs = self.models_save_dir_last if last else self.models_save_dir
         for i in range(len(self.modules)):
             module_name = self.module_names[i]
             module = self.modules[i]
             #torch.save(module.state_dict(), osp.join(self.models_save_dir, '{}-{}'.format(module_name, epoch)))
-            torch.save(module.state_dict(), osp.join(self.models_save_dir, '{}.pt'.format(module_name)))
+            torch.save(module.state_dict(), osp.join(save_dirs, '{}.pt'.format(module_name)))
 
     def load_checkpoints(self, epoch):
         for i in range(len(self.modules)):

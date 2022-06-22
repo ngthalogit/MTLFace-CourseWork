@@ -89,6 +89,7 @@ class MTLFace(object):
         return parser
 
     def fit(self):
+        loss_check = 100000000
         opt = self.opt
         id_loss, da_loss, age_loss = [], [], []
         d1_logit, d3_logit, d_loss, g_logit, fas_id_loss, fas_age_loss = [], [], [], [], [], []
@@ -102,6 +103,10 @@ class MTLFace(object):
                 id_loss.append(loss[0])
                 da_loss.append(loss[1])
                 age_loss.append(loss[2])
+                total_loss = id_loss + da_loss + age_loss
+                if loss_check > total_loss:
+                    loss_check = total_loss
+                    self.fr.logger.checkpoints(n_iter, last=False)
                 if n_iter == opt.num_iter:
                     self.fr.logger.checkpoints(n_iter)
 
