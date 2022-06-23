@@ -124,9 +124,6 @@ class MTLFace(object):
                 g_logit.append(loss[3])
                 fas_id_loss.append(loss[4])
                 fas_age_loss.append(loss[5])
-                total_loss = d1_logit[-1] + d3_logit[-1] + g_logit[-1] + fas_id_loss[-1] + fas_age_loss[-1]
-                if total_loss < loss_check:
-                    self.fas.logger.checkpoints(n_iter, last=True)
                 if n_iter == opt.num_iter:
                     self.fas.logger.checkpoints(n_iter)
             if n_iter % opt.val_interval == 0:
