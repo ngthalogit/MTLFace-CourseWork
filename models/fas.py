@@ -8,6 +8,7 @@ from common.data_prefetcher import DataPrefetcher
 from common.ops import convert_to_ddp, reduce_loss
 from . import BasicTask
 from common.dataset import AgingDataset
+from matplotlib import pyplot as plt
 
 
 class FAS(BasicTask):
@@ -81,7 +82,8 @@ class FAS(BasicTask):
         g_source = self.generator(source_img, x_1, x_2, x_3, x_4, x_5, x_id, x_age, condition=target_label)
         from torchvision.transforms.functional import to_pil_image
         from torchvision.utils import make_grid
-        to_pil_image(make_grid(g_source))
+        a = to_pil_image(make_grid(g_source))
+        plt.imshow(a)
 
         d1_logit = self.discriminator(target_img, target_label)
         d3_logit = self.discriminator(g_source.detach().float(), target_label)
