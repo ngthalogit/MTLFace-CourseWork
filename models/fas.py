@@ -79,6 +79,9 @@ class FAS(BasicTask):
                 x_1.float(), x_2.float(), x_3.float(), x_4.float(), x_5.float(), x_id.float(), x_age.float()
 
         g_source = self.generator(source_img, x_1, x_2, x_3, x_4, x_5, x_id, x_age, condition=target_label)
+        from torchvision.transforms.functional import to_pil_image
+        from torchvision.utils import make_grid
+        to_pil_image(make_grid(g_source))
 
         d1_logit = self.discriminator(target_img, target_label)
         d3_logit = self.discriminator(g_source.detach().float(), target_label)
